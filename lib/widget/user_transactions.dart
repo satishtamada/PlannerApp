@@ -18,6 +18,14 @@ class UserTransactions extends State<UserTransaction> {
         title: 'butter', id: 't3', amount: 55.6, dateTime: DateTime.now())
   ];
 
+  void openAddNewTransactionBottomSheet(BuildContext ctx) {
+    showModalBottomSheet(
+        context: ctx,
+        builder: (_) {
+          return Text("Hi");
+        });
+  }
+
   void addTransaction(String txtTitle, double txtAmount) {
     final newTx = Transactions(
         title: txtTitle,
