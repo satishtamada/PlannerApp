@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:planner_app/model/transaction.dart';
+import 'package:planner_app/widget/chart.dart';
 import 'package:planner_app/widget/new_transaction_list.dart';
 import 'package:planner_app/widget/transaction_list.dart';
 
@@ -9,9 +10,12 @@ class HomeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter App',
-      home: Home(),
-    );
+        title: 'Flutter App',
+        home: Home(),
+        theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.amber,
+            fontFamily: 'Quicksand'));
   }
 }
 
@@ -25,12 +29,12 @@ class MyDashBoard extends State<Home> {
   String inputAmount;
 
   List<Transactions> transaction = [
-    Transactions(
+    /* Transactions(
         title: 'milk packet', id: 't1', amount: 55.6, dateTime: DateTime.now()),
     Transactions(
         title: 'chicken', id: 't2', amount: 55.6, dateTime: DateTime.now()),
     Transactions(
-        title: 'butter', id: 't3', amount: 55.6, dateTime: DateTime.now())
+        title: 'butter', id: 't3', amount: 55.6, dateTime: DateTime.now())*/
   ];
 
   void openAddNewTransactionBottomSheet(BuildContext ctx) {
@@ -39,7 +43,7 @@ class MyDashBoard extends State<Home> {
         builder: (_) {
           return GestureDetector(
             child: NewTransactionList(addTransaction),
-            onTap: (){},
+            onTap: () {},
             behavior: HitTestBehavior.opaque,
           );
         });
@@ -57,6 +61,12 @@ class MyDashBoard extends State<Home> {
     });
   }
 
+  List<Transactions> get _recentTransaction {
+    return transaction.where((tx) {
+      return tx.dateTime.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,14 +82,7 @@ class MyDashBoard extends State<Home> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Card(
-              child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.all(10),
-                  padding: EdgeInsets.all(10),
-                  child: Text('Header Container')),
-              elevation: 5,
-            ),
+            Chart(_recentTransaction),
             TransactionList(transaction),
           ],
         ),
