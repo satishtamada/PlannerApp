@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../model/transaction.dart';
 
 class TransactionList extends StatelessWidget {
   List<Transactions> transaction;
+  Function deleteTran;
 
-  TransactionList(this.transaction);
+  TransactionList(this.transaction, this.deleteTran);
 
   @override
   Widget build(BuildContext context) {
@@ -17,42 +17,33 @@ class TransactionList extends StatelessWidget {
                 itemCount: transaction.length,
                 itemBuilder: (ctx, index) {
                   return Card(
-                      child: Container(
-                    margin: EdgeInsets.all(10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
+                    elevation: 4,
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        child: FittedBox(
                           child: Text(
                             '\$${transaction[index].amount}',
-                            style: TextStyle(color: Colors.purple),
-                          ),
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.purple),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                transaction[index].title.toUpperCase(),
-                                style: TextStyle(
-                                    fontSize: 17, color: Colors.black),
-                              ),
-                              Text(
-                                DateFormat()
-                                    .format(transaction[index].dateTime),
-                                style: TextStyle(color: Colors.grey),
-                              )
-                            ],
-                          ),
-                          padding: EdgeInsets.all(10),
-                        )
-                      ],
+                      ),
+                      title: Text(
+                        transaction[index].title.toUpperCase(),
+                        style: TextStyle(fontSize: 17, color: Colors.black),
+                      ),
+                      subtitle: Text(
+                        DateFormat().format(transaction[index].dateTime),
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                        onPressed: () => deleteTran(transaction[index].id),
+                      ),
                     ),
-                  ));
+                  );
                 },
               )
             : Container(

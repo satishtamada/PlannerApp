@@ -25,7 +25,7 @@ class Chart extends StatelessWidget {
         'day': DateFormat.E().format(weekDay).substring(0, 1),
         'amount': totalSum
       };
-    });
+    }).reversed.toList();
   }
 
   double get totalSum {
@@ -43,8 +43,12 @@ class Chart extends StatelessWidget {
         children: groupTrnas.map((data) {
           return Flexible(
               fit: FlexFit.tight,
-              child: ChartItem(data['day'], data['amount'],
-                  (data['amount'] as double) / totalSum));
+              child: ChartItem(
+                  data['day'],
+                  data['amount'],
+                  totalSum == 0.0
+                      ? 0.0
+                      : (data['amount'] as double) / totalSum));
         }).toList(),
       ),
     );

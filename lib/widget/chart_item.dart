@@ -28,7 +28,8 @@ class ChartItem extends StatelessWidget {
                       color: Colors.green),
                 ),
                 FractionallySizedBox(
-                  heightFactor: totalSpendingAmount,
+                  heightFactor:
+                      totalSpendingAmount,
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.red,

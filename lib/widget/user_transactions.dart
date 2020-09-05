@@ -44,7 +44,7 @@ class UserTransactions extends State<UserTransaction> {
     return Column(
       children: <Widget>[
         NewTransactionList(addTransaction),
-        TransactionList(transaction),
+        TransactionList(transaction,null),
       ],
     );
   }

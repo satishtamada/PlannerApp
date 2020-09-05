@@ -49,15 +49,22 @@ class MyDashBoard extends State<Home> {
         });
   }
 
-  void addTransaction(String txtTitle, double txtAmount) {
+  void addTransaction(
+      String txtTitle, double txtAmount, DateTime selectedDate) {
     final newTx = Transactions(
         title: txtTitle,
         id: new DateTime.now().toString(),
         amount: txtAmount,
-        dateTime: new DateTime.now());
+        dateTime: selectedDate);
 
     setState(() {
       transaction.add(newTx);
+    });
+  }
+
+  void deleteTran(String id) {
+    setState(() {
+      transaction.removeWhere((tx) => tx.id == id);
     });
   }
 
@@ -83,7 +90,7 @@ class MyDashBoard extends State<Home> {
         child: Column(
           children: <Widget>[
             Chart(_recentTransaction),
-            TransactionList(transaction),
+            TransactionList(transaction,deleteTran),
           ],
         ),
       ),

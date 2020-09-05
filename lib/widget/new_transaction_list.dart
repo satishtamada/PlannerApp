@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewTransactionList extends StatefulWidget {
   Function addNewTranscation;
@@ -12,15 +13,32 @@ class NewTransactionList extends StatefulWidget {
 class NewTranscation extends State<NewTransactionList> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
+  DateTime selectedDate;
 
   void addTranscation() {
     final title = titleController.text;
     final amount = double.parse(amountController.text);
-    if (title.isEmpty || amount < 0) {
+    if (title.isEmpty || amount < 0 || selectedDate == null) {
       return;
     }
-    widget.addNewTranscation(title,amount);
+    widget.addNewTranscation(title, amount, selectedDate);
     Navigator.of(context).pop();
+  }
+
+  void selectDate() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2019),
+            lastDate: DateTime.now())
+        .then((onValue) {
+      if (onValue == null) {
+        return;
+      }
+      setState(() {
+        selectedDate = onValue;
+      });
+    });
   }
 
   @override
@@ -42,10 +60,31 @@ class NewTranscation extends State<NewTransactionList> {
             controller: amountController,
             keyboardType: TextInputType.number,
           ),
-          FlatButton(
+          Container(
+            child: Row(
+              children: <Widget>[
+                Text(selectedDate == null
+                    ? 'Select Date'
+                    : DateFormat.yMd().format(selectedDate)),
+                FlatButton(
+                  child: Text(
+                    'Choose Date',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor),
+                  ),
+                  onPressed: () {
+                    selectDate();
+                  },
+                )
+              ],
+            ),
+          ),
+          RaisedButton(
+            color: Theme.of(context).primaryColor,
             child: Text(
               'Add Item',
-              style: TextStyle(color: Colors.purple),
+              style: TextStyle(color: Colors.white),
             ),
             onPressed: () {
               addTranscation();
