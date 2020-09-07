@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:planner_app/model/transaction.dart';
 import 'package:planner_app/widget/chart.dart';
@@ -27,6 +28,7 @@ class Home extends StatefulWidget {
 class MyDashBoard extends State<Home> {
   String inputTitle;
   String inputAmount;
+  bool switchState = false;
 
   List<Transactions> transaction = [
     /* Transactions(
@@ -89,15 +91,25 @@ class MyDashBoard extends State<Home> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            Switch.adaptive(
+              value: true,
+              onChanged: (value) {
+                setState(() {
+                  switchState = value;
+                });
+              },
+            ),
             Chart(_recentTransaction),
-            TransactionList(transaction,deleteTran),
+            TransactionList(transaction, deleteTran),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => openAddNewTransactionBottomSheet(context),
-      ),
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => openAddNewTransactionBottomSheet(context),
+            ),
     );
   }
 }
